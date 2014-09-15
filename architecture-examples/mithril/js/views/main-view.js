@@ -2,8 +2,9 @@
 var app = app || {};
 
 // View utility
-app.watchInput = function (onenter, onescape) {
+app.watchInput = function (onInput, onenter, onescape) {
     return function (e) {
+        onInput();
         if (e.keyCode == app.ENTER_KEY) {
             onenter();
         } else if (e.keyCode == app.ESC_KEY) {
@@ -17,8 +18,8 @@ app.view = function (ctrl) {
         m('header#header', [
             m('h1', 'todos'),
             m('input#new-todo[placeholder="What needs to be done?"]', {
-                oninput: m.withAttr('value', ctrl.title),
                 onkeyup: app.watchInput(
+                    m.withAttr('value', ctrl.title),
                     ctrl.add.bind(ctrl),
                     ctrl.clearTitle.bind(ctrl)
                 ),
@@ -55,8 +56,8 @@ app.view = function (ctrl) {
                         ]),
                         m('input.edit', {
                             value: task.title(),
-                            oninput: m.withAttr('value', task.title),
                             onkeyup: app.watchInput(
+                                m.withAttr('value', task.title),
                                 ctrl.doneEditing.bind(ctrl, task, index),
                                 ctrl.cancelEditing.bind(ctrl, task)
                             ),
